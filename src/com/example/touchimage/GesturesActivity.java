@@ -2,9 +2,7 @@ package com.example.touchimage;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImageColorInvertFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImagePosterizeFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageSepiaFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageSobelEdgeDetection;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -20,14 +18,15 @@ public class GesturesActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		RelativeLayout placeHolder = (RelativeLayout) findViewById(R.id.place_holder);
-
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ken);
+		
+		/*** Filter ***/
+		GPUImageSobelEdgeDetection edgeFilter = new GPUImageSobelEdgeDetection();
+		edgeFilter.setLineSize(0.3f);
+		
+		/*** Process **/
 		GPUImage imgProcessor = new GPUImage(getApplicationContext());
-		imgProcessor.setFilter(new GPUImageGrayscaleFilter());
-		imgProcessor.setImage(bitmap);
-
-		bitmap = imgProcessor.getBitmapWithFilterApplied(bitmap);
-		imgProcessor.setFilter(new GPUImageSobelEdgeDetection());
+		imgProcessor.setFilter(edgeFilter);
 		imgProcessor.setImage(bitmap);
 
 		bitmap = imgProcessor.getBitmapWithFilterApplied(bitmap);
@@ -38,9 +37,9 @@ public class GesturesActivity extends Activity {
 		imgProcessor.setFilter(new GPUImagePosterizeFilter());
 		imgProcessor.setImage(bitmap);
 
-		bitmap = imgProcessor.getBitmapWithFilterApplied(bitmap);
+		/*bitmap = imgProcessor.getBitmapWithFilterApplied(bitmap);
 		imgProcessor.setFilter(new GPUImageSepiaFilter());
-		imgProcessor.setImage(bitmap);
+		imgProcessor.setImage(bitmap);*/
 
 		placeHolder.addView(new SandboxView(getApplicationContext(), imgProcessor.getBitmapWithFilterApplied()));
 	}
